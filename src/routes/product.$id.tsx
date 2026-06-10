@@ -5,7 +5,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Mail, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/product/$id")({
-  loader: ({ params }) => {
+  loader: ({ params }): { product: Product; related: Product[] } => {
     const product = PRODUCTS.find((p) => p.id === params.id);
     if (!product) throw notFound();
     const related = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 3);
