@@ -3,7 +3,7 @@ import { CATEGORIES, PRODUCTS, type Product } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/category/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { cat: (typeof CATEGORIES)[number]; products: Product[] } => {
     const cat = CATEGORIES.find((c) => c.slug === params.slug);
     if (!cat) throw notFound();
     return { cat, products: PRODUCTS.filter((p) => p.category === cat.slug) };
