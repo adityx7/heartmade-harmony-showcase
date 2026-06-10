@@ -72,7 +72,7 @@ function ProductPage() {
           </div>
           {product.images.length > 1 && (
             <div className="mt-3 flex gap-3">
-              {product.images.map((img, i) => (
+              {product.images.map((img: string, i: number) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
@@ -127,7 +127,7 @@ function ProductPage() {
         <div className="mt-20">
           <h2 className="text-2xl sm:text-3xl">You may also love</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((p) => <ProductCard key={p.id} product={p} />)}
+            {related.map((p: any) => <ProductCard key={p.id} product={p} />)}
           </div>
         </div>
       )}
