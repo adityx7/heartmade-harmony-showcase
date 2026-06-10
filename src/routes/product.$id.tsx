@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import { BRAND, PRODUCTS } from "@/data/products";
+import { BRAND, PRODUCTS, type Product } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 import { Mail, MessageCircle } from "lucide-react";
 
@@ -127,7 +127,7 @@ function ProductPage() {
         <div className="mt-20">
           <h2 className="text-2xl sm:text-3xl">You may also love</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((p: any) => <ProductCard key={p.id} product={p} />)}
+            {related.map((p: Product) => <ProductCard key={p.id} product={p} />)}
           </div>
         </div>
       )}
