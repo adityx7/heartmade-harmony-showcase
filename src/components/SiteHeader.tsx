@@ -5,6 +5,7 @@ import { BRAND, IMAGES } from "@/data/products";
 
 const links = [
   { to: "/", label: "Home" },
+  { to: "/products", label: "All Products" },
   { to: "/categories", label: "Categories" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
@@ -16,11 +17,11 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 w-full border-b border-[var(--blush)]/30 bg-background/70 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex min-w-0 items-center gap-2">
-          <img src={IMAGES.logo} alt={BRAND.name} className="h-10 w-10 rounded-full object-cover shrink-0" />
+          <img src={IMAGES.logo} alt={BRAND.name} className="h-10 w-10 object-contain shrink-0" />
           <div className="min-w-0 leading-tight">
-            <div className="script truncate text-xl text-primary">{BRAND.name}</div>
-            <div className="hidden text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:block">
-              @{BRAND.instagram}
+            <div className="brand truncate text-xl text-primary">{BRAND.name}</div>
+            <div className="text-[10px] font-medium text-black sm:block">
+              {BRAND.tagline}
             </div>
           </div>
         </Link>

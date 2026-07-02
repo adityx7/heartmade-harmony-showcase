@@ -11,7 +11,7 @@ export function SiteFooter() {
           <div className="flex items-center gap-3">
             <img src={IMAGES.logo} alt={BRAND.name} className="h-12 w-12 rounded-full object-cover" />
             <div>
-              <div className="script text-2xl text-primary">{BRAND.name}</div>
+              <div className="brand text-2xl text-primary">{BRAND.name}</div>
               <div className="text-xs text-muted-foreground">{BRAND.tagline}</div>
             </div>
           </div>

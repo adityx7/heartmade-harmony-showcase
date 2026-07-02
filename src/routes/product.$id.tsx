@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { BRAND, PRODUCTS, type Product } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/product/$id")({
   loader: ({ params }): { product: Product; related: Product[] } => {
@@ -36,6 +36,8 @@ function ProductPage() {
   const { product, related } = Route.useLoaderData();
   const [active, setActive] = useState(0);
   const [zoom, setZoom] = useState(false);
+  const instagramLink = product.reel || BRAND.instagramUrl;
+  const instagramLabel = product.reel ? "View reel on Instagram" : `View on Instagram: @${BRAND.instagram}`;
 
   const wa = `https://wa.me/${BRAND.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
     `Hi ${BRAND.name}, I would like to enquire about ${product.name}.`
@@ -59,7 +61,7 @@ function ProductPage() {
       <div className="mt-6 grid gap-10 lg:grid-cols-2">
         <div>
           <div
-            className={`overflow-hidden rounded-3xl bg-secondary/40 shadow-[var(--shadow-card)] ${zoom ? "cursor-zoom-out" : "cursor-zoom-in"}`}
+            className={`relative overflow-hidden rounded-3xl bg-secondary/40 shadow-[var(--shadow-card)] ${zoom ? "cursor-zoom-out" : "cursor-zoom-in"}`}
             onClick={() => setZoom((z) => !z)}
           >
             <div className="aspect-square overflow-hidden">
@@ -71,16 +73,32 @@ function ProductPage() {
             </div>
           </div>
           {product.images.length > 1 && (
-            <div className="mt-3 flex gap-3">
-              {product.images.map((img: string, i: number) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`overflow-hidden rounded-2xl border-2 transition ${i === active ? "border-primary" : "border-transparent"}`}
-                >
-                  <img src={img} alt="" className="h-20 w-20 object-cover" />
-                </button>
-              ))}
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <button
+                onClick={() => setActive((i) => (i - 1 + product.images.length) % product.images.length)}
+                className="grid h-10 w-10 place-items-center rounded-full bg-secondary/60 transition hover:bg-secondary"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <div className="flex gap-3 overflow-x-auto">
+                {product.images.map((img: string, i: number) => (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className={`overflow-hidden rounded-2xl border-2 transition flex-shrink-0 ${i === active ? "border-primary" : "border-transparent"}`}
+                  >
+                    <img src={img} alt="" className="h-20 w-20 object-cover" />
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setActive((i) => (i + 1) % product.images.length)}
+                className="grid h-10 w-10 place-items-center rounded-full bg-secondary/60 transition hover:bg-secondary"
+                aria-label="Next image"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
             </div>
           )}
         </div>
@@ -113,12 +131,12 @@ function ProductPage() {
           </div>
 
           <a
-            href={BRAND.instagramUrl}
+            href={instagramLink}
             target="_blank"
             rel="noreferrer"
             className="mt-5 inline-block text-sm text-primary hover:underline"
           >
-            ▶ View on Instagram: @{BRAND.instagram}
+            ▶ {instagramLabel}
           </a>
         </div>
       </div>

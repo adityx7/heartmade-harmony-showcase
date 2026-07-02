@@ -40,6 +40,7 @@
 
   --font-display: "Cormorant Garamond", serif;
   --font-script: "Dancing Script", cursive;
+  --font-brand: "Harmony Script", cursive;
   --font-body: "Inter", sans-serif;
 
   --shadow-soft: 0 10px 40px -10px color-mix(in oklab, var(--blush) 35%, transparent);
@@ -121,6 +122,11 @@
 
 @utility script {
   font-family: var(--font-script);
+  font-weight: 600;
+}
+
+@utility brand {
+  font-family: var(--font-brand);
   font-weight: 600;
 }
 

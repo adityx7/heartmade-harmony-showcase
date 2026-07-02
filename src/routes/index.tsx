@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Heart, Sparkles, Package, Gift, ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { BRAND, CATEGORIES, IMAGES, PRODUCTS, REVIEWS } from "@/data/products";
+import { BRAND, CATEGORIES, IMAGES, PRODUCTS, REVIEWS, HERO_IMAGES, GLIMPSE_IMAGES, BESTSELLER_IMAGES, BESTSELLERS_MAPPING } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/")({
@@ -15,12 +15,19 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const SLIDES = [
-  { image: IMAGES.kundanHairband, title: "Handcrafted with Love,", accent: "Made Just for You ❤️" },
-  { image: IMAGES.kundanBangles, title: "Customised Gifts That", accent: "Create Lasting Memories" },
-  { image: IMAGES.resinWork, title: "Budget-Friendly Creations", accent: "for Every Occasion" },
-  { image: IMAGES.bowClips, title: "Unique Return Gifts,", accent: "Personalised for Loved Ones" },
-];
+const SLIDES = HERO_IMAGES.map((image, idx) => {
+  const titles = [
+    { title: "Handcrafted with Love,", accent: "Made Just for You ❤️" },
+    { title: "Customised Gifts That", accent: "Create Lasting Memories" },
+    { title: "Budget-Friendly Creations", accent: "for Every Occasion" },
+    { title: "Unique Return Gifts,", accent: "Personalised for Loved Ones" },
+    { title: "Artisan Crafted,", accent: "Handmade for You" },
+    { title: "Timeless Elegance,", accent: "Beautifully Personalized" },
+    { title: "Premium Quality,", accent: "Affordable Luxury" },
+    { title: "Every Piece,", accent: "A Work of Art" },
+  ];
+  return { image, ...titles[idx % titles.length] };
+});
 
 function Hero() {
   const [i, setI] = useState(0);
@@ -43,13 +50,13 @@ function Hero() {
               }`}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--blush)]/70 via-[var(--cream)]/40 to-[var(--lavender)]/60" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-black/50" />
           <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-            <img src={IMAGES.logo} alt={BRAND.name} className="float mb-4 h-20 w-20 rounded-full object-cover shadow-[var(--shadow-soft)] sm:h-24 sm:w-24" />
+            <img src={IMAGES.logo} alt={BRAND.name} className="float mb-4 h-20 w-20 object-contain shadow-[var(--shadow-soft)] sm:h-24 sm:w-24" />
             <div key={i} className="fade-up max-w-3xl">
-              <h1 className="text-3xl text-foreground sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl text-white drop-shadow-lg sm:text-5xl lg:text-6xl" style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}>
                 {SLIDES[i].title}
-                <span className="script mt-1 block text-primary">{SLIDES[i].accent}</span>
+                <span className="script mt-1 block text-pink-200 drop-shadow-lg" style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}>{SLIDES[i].accent}</span>
               </h1>
             </div>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -148,8 +155,8 @@ function WhyUs() {
 
 function Showcase() {
   // 4:3 layout — 4 vertical cards + 3 horizontal cards
-  const verticals = [IMAGES.kundanHairband, IMAGES.kundanBangles, IMAGES.silkBangles, IMAGES.bowClips];
-  const horizontals = [IMAGES.resinWork, IMAGES.namePlate, IMAGES.paintings];
+  const verticals = GLIMPSE_IMAGES.slice(0, 4);
+  const horizontals = GLIMPSE_IMAGES.slice(4, 7);
   return (
     <section className="mx-auto mt-24 max-w-7xl px-4 sm:px-6">
       <div className="text-center">
@@ -179,7 +186,6 @@ function Showcase() {
 }
 
 function BestSellers() {
-  const featured = PRODUCTS.slice(0, 6);
   return (
     <section className="mx-auto mt-24 max-w-7xl px-4 sm:px-6">
       <div className="flex items-end justify-between gap-4">
@@ -189,8 +195,33 @@ function BestSellers() {
         </div>
         <Link to="/categories" className="hidden text-sm text-primary hover:underline sm:block">View all →</Link>
       </div>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        {BESTSELLER_IMAGES.map((src, idx) => {
+          const imageFileName = src.split("/").pop() || "";
+          const mapping = BESTSELLERS_MAPPING.find((m) => m.image.includes(imageFileName));
+          const productId = mapping?.productId;
+
+          const card = (
+            <div className="aspect-[3/4] overflow-hidden bg-secondary/40">
+              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            </div>
+          );
+
+          return productId ? (
+            <Link
+              key={idx}
+              to="/product/$id"
+              params={{ id: productId }}
+              className="group overflow-hidden rounded-3xl shadow-[var(--shadow-card)] cursor-pointer"
+            >
+              {card}
+            </Link>
+          ) : (
+            <div key={idx} className="group overflow-hidden rounded-3xl shadow-[var(--shadow-card)]">
+              {card}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
